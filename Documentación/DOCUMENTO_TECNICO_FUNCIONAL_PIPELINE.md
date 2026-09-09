@@ -8,7 +8,7 @@
 > **Consumidor**: `MODELO_ML_PROYECCION_ASIGNATURAS.ipynb` (Fases 2–7)
 > **Tiempo de corrida**: ~8 min (dominado por la lectura del detalle de inscripción, 385 MB)
 
-**Cómo leer este documento.** Sigue la convención de la Guía Maestra DS: 🔧 detalle técnico · 🧭 puente entre negocio y técnica · 👔 lectura ejecutiva. Las secciones §1–§3 son 👔🧭; §4–§11 son 🔧🧭; §12–§15 son transversales.
+**Cómo leer este documento.** Usa un sistema de audiencias: 🔧 detalle técnico · 🧭 puente entre negocio y técnica · 👔 lectura ejecutiva. Las secciones §1–§3 son 👔🧭; §4–§11 son 🔧🧭; §12–§15 son transversales.
 
 ---
 

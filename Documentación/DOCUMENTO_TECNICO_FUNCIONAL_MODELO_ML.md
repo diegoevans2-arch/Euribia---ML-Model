@@ -32,7 +32,7 @@ author: Diego Evans Pérez Paz
 > **Salida**: `PROYECCION_INSCRITOS_2026_2027.csv` (22.142 × 36) · `SERIE_COMPLETA_REAL_VS_PROYECTADO.csv` (78.125 × 35)
 > **Tiempo de corrida**: ~50 min completo · ~20 min saltando las 3 celdas diagnósticas
 
-**Cómo leer este documento.** Sigue la convención de la Guía Maestra DS: 🔧 detalle técnico · 🧭 puente entre negocio y técnica · 👔 lectura ejecutiva. Las secciones §1–§3 son 👔🧭; §4–§11 son 🔧🧭; §12–§15 son transversales.
+**Cómo leer este documento.** Usa un sistema de audiencias: 🔧 detalle técnico · 🧭 puente entre negocio y técnica · 👔 lectura ejecutiva. Las secciones §1–§3 son 👔🧭; §4–§11 son 🔧🧭; §12–§15 son transversales.
 
 ---
 
@@ -91,7 +91,7 @@ El modelo responde con **tres cifras y una probabilidad**:
 └──────────────────────────────────────────────────────────────────┴────┘
 ```
 
-> [!tip] 💡 Por qué no predecir inscritos directo (Tomo 17 §6)
+> [!tip] 💡 Por qué no predecir inscritos directo
 > *"Un árbol nunca predice fuera del rango visto en train."* Con la matrícula creciendo +18%/+25% anual, el modelo v0 (nivel directo) se aplanaba en el techo histórico y **perdía contra el seasonal naive por 21%** (WAPE 0,466 vs 0,385). Sesgo degradándose de −0,16 (2023) a −0,39 (2026). La reformulación como corrección resolvió el problema de raíz: el naive aporta el nivel, el modelo solo aprende cuánto corregirlo.
 
 ---
@@ -127,9 +127,9 @@ Sobre 55.983 celdas y 2.612.770 inscritos. Cada cifra con su vara al lado:
 
 > [!warning] ⚠️ Hay dos MASE en este proyecto y ambos son correctos
 > El **0,894** de arriba usa como escala el **MAE del naive estacional
-> out-of-sample**, sobre la misma base comparable. El **1,489** de la §10 usa la
-> escala canónica de Hyndman: **MAE in-sample del naive de un paso, solo con train**
-> (baseline 1,630).
+> out-of-sample**, sobre la misma base comparable. La escala canónica de Hyndman
+> —**MAE in-sample del naive de un paso, solo con train**— da en cambio **1,489**,
+> contra un baseline de **1,630**.
 >
 > No se contradicen — normalizan contra tareas distintas. El naive de un paso
 > in-sample es mucho más fácil de batir que el estacional out-of-sample, y por eso
@@ -137,7 +137,7 @@ Sobre 55.983 celdas y 2.612.770 inscritos. Cada cifra con su vara al lado:
 > debajo de su baseline**, que es lo que la métrica debe responder. Al citarlo fuera
 > de contexto, decir siempre qué escala se usó.
 
-> [!important] 🎯 Criterio de éxito (Tomo 17 §10)
+> [!important] 🎯 Criterio de éxito
 > *"Si no le ganas al seasonal naive con holgura, no tienes modelo — tienes decoración."*
 > El skill de **+10,6 %** es la respuesta. Lo que lo refuerza es el comportamiento del
 > sesgo: para dimensionar cupos, un error simétrico vale más que uno menor pero
@@ -219,26 +219,26 @@ Sobre 55.983 celdas y 2.612.770 inscritos. Cada cifra con su vara al lado:
                                     └──► [26] F7e · SECCIONES 🆕
 ```
 
-| # | Fase | Qué hace | Tomo | Tiempo |
-|---|---|---|---|---|
-| 0 | Setup | Carga el parquet, aplica filtro `TT_MODELO` | — | 5 s |
-| 1–4 | **F2** · EDA + clustering | Estacionalidad, correlación, K-Means/HDBSCAN | T04 · T06 | 2 min |
-| 5 | **F3** · Baseline | Seasonal naive + walk-forward (7 orígenes) | T17 §10 · T10 | 3 min |
-| 6–11 | **F4** · v0→v3 | Nivel → corrección → tendencia → blend | T07 · T11 · T17 §6 | 8 min |
-| **12** | **F4g** · v5 | CatBoost sin `REGLA` · define `_cat_str`, `_CatWrap`, `_fit_corr_v4` | T23 | 6 min |
-| 13 | F4g-bis | Ranking de algoritmos + ensemble + importancia | T07 · T11 | ⏭️ 14 min |
-| 14 | F4g-ter | Pruebas: ¿REGLA? ¿CatBoost? ¿qué sobra? | T11 | ⏭️ 14 min |
-| 15 | **F4h** | Error por segmento · define `WAPE_SERIE` | T08 | 1 min |
-| 16 | F4i | Experimento ponderación por volumen | T11 | 1 min |
-| **17** | **F4j** | Modelo de supervivencia | T07 | 2 min |
-| 18–19 | **F5 · F5b** | Cuantiles P10/P50/P90 + CQR | T17 §9 | 14 min |
-| 20 | F5c | ¿CatBoost en cuantiles? (diagnóstica, ya decidió D-31) | — | ⏭️ 14 min |
-| 21 | **F6** | Demanda → secciones | T08 · T14 | 30 s |
-| **22** | **F7a** | Backtesting de horizonte 2 · define `FACTOR_H2` | T10 | 1 min |
-| **23** | **F7b** | Proyección multi-período → CSV 1 | — | 30 s |
-| **24** | **F7c** | Serie completa → CSV 2 | — | 1 min |
-| **25** | **F7d** | `CODIGO_PROGRAMABLE` en ambos CSV | — | 20 s |
-| **26** | **F7e** | Secciones — estándar + 4 escenarios percentil | — | 10 s |
+| # | Fase | Qué hace | Tiempo |
+|---|---|---|---|
+| 0 | Setup | Carga el parquet, aplica filtro `TT_MODELO` | 5 s |
+| 1–4 | **F2** · EDA + clustering | Estacionalidad, correlación, K-Means/HDBSCAN | 2 min |
+| 5 | **F3** · Baseline | Seasonal naive + walk-forward (7 orígenes) | 3 min |
+| 6–11 | **F4** · v0→v3 | Nivel → corrección → tendencia → blend | 8 min |
+| **12** | **F4g** · v5 | CatBoost sin `REGLA` · define `_cat_str`, `_CatWrap`, `_fit_corr_v4` | 6 min |
+| 13 | F4g-bis | Ranking de algoritmos + ensemble + importancia | ⏭️ 14 min |
+| 14 | F4g-ter | Pruebas: ¿REGLA? ¿CatBoost? ¿qué sobra? | ⏭️ 14 min |
+| 15 | **F4h** | Error por segmento · define `WAPE_SERIE` | 1 min |
+| 16 | F4i | Experimento ponderación por volumen | 1 min |
+| **17** | **F4j** | Modelo de supervivencia | 2 min |
+| 18–19 | **F5 · F5b** | Cuantiles P10/P50/P90 + CQR | 14 min |
+| 20 | F5c | ¿CatBoost en cuantiles? (diagnóstica, ya decidió D-31) | ⏭️ 14 min |
+| 21 | **F6** | Demanda → secciones | 30 s |
+| **22** | **F7a** | Backtesting de horizonte 2 · define `FACTOR_H2` | 1 min |
+| **23** | **F7b** | Proyección multi-período → CSV 1 | 30 s |
+| **24** | **F7c** | Serie completa → CSV 2 | 1 min |
+| **25** | **F7d** | `CODIGO_PROGRAMABLE` en ambos CSV | 20 s |
+| **26** | **F7e** | Secciones — estándar + 4 escenarios percentil | 10 s |
 
 **⏭️** = celda diagnóstica, saltable. No alimenta celdas posteriores.
 
@@ -248,7 +248,7 @@ Sobre 55.983 celdas y 2.612.770 inscritos. Cada cifra con su vara al lado:
 
 ---
 
-## 5 · La validación — walk-forward (Tomo 10 · Tomo 17 §10) 🔧
+## 5 · La validación — walk-forward (Tashman, 2000) 🔧
 
 Única validación honesta en forecasting. Para cada origen `t`: entrenar con **todo lo anterior** a `t`, predecir `t`. Nunca K-Fold aleatorio — barajar el tiempo es entrenar con el diario de mañana.
 
@@ -262,7 +262,7 @@ Sobre 55.983 celdas y 2.612.770 inscritos. Cada cifra con su vara al lado:
 
 **Orígenes:** `202310, 202320, 202410, 202420, 202510, 202520, 202610` (7 períodos cerrados).
 
-**Métricas (Tomo 08 · Tomo 17 §10):**
+**Métricas (Hyndman y Koehler, 2006):**
 
 | Métrica | Uso |
 |---|---|
@@ -270,7 +270,7 @@ Sobre 55.983 celdas y 2.612.770 inscritos. Cada cifra con su vara al lado:
 | **MASE** | Referencia comparable entre series; escala = MAE in-sample del naive, **solo con train** |
 | **Sesgo** | `Σ(ŷ−y)/Σy` — ¿sobre o sub-proyecta? |
 | MAE / RMSE | Interpretable en inscritos; RMSE expone la cola |
-| Pinball + **cobertura** | Cuantiles (Tomo 17 §9) |
+| Pinball + **cobertura** | Cuantiles (Romano et al., 2019) |
 
 ---
 
@@ -284,7 +284,7 @@ Sobre 55.983 celdas y 2.612.770 inscritos. Cada cifra con su vara al lado:
 | XGBoost | 0,475 | −0,263 |
 | CatBoost | 0,475 | −0,283 |
 
-**Los tres perdieron contra el baseline por ~21%.** Causa: los árboles no extrapolan tendencia (Tomo 17 §6). `CURSO` y `MATERIA` fueron las features #1 y #2 — el modelo memorizaba identidad en vez de aprender dinámica.
+**Los tres perdieron contra el baseline por ~21%.** Causa: los árboles no extrapolan tendencia. `CURSO` y `MATERIA` fueron las features #1 y #2 — el modelo memorizaba identidad en vez de aprender dinámica.
 
 ### 6.2 La reformulación como corrección
 
@@ -324,7 +324,7 @@ predicción  = expm1( log1p(ins_lag_1y) + corrección )
 | **CatBoost sin REGLA** ⭐ | **0,3450** | **+8,99%** |
 
 > [!important] 📌 Importancia alta ≠ aporte
-> La importancia de una feature no dice si ayuda a generalizar. Solo el error out-of-sample lo dice. (Tomo 11 §3)
+> La importancia de una feature no dice si ayuda a generalizar. Solo el error out-of-sample lo dice.
 
 ### 6.5 El blend y la reconciliación
 
@@ -339,7 +339,7 @@ predicción  = expm1( log1p(ins_lag_1y) + corrección )
 
 ---
 
-## 7 · Los cuantiles — P10 / P50 / P90 (Tomo 17 §9) 🔧
+## 7 · Los cuantiles — P10 / P50 / P90 (Romano et al., 2019) 🔧
 
 ### 7.1 Arquitectura
 
@@ -450,7 +450,7 @@ Medido sobre 4 pares de orígenes encadenados (202320→202420, 202420→202520,
 
 ---
 
-## 10 · Regla anti-leakage (Tomo 10) 🔧
+## 10 · Regla anti-leakage (Tashman, 2000) 🔧
 
 > [!danger] 🚨 Todo mira solo al pasado
 > **Ninguna variable del período que se pronostica entra como feature.** El notebook aborta si detecta una prohibida.

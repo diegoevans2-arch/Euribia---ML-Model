@@ -1,6 +1,6 @@
 <div align="center">
 
-# Euribia
+# === Euribia ===
 
 **Forecasting de demanda de asignaturas sobre ERP Banner**
 
@@ -35,11 +35,13 @@ que representan **2.612.770 inscritos**.
 | Sesgo | — | +4,2 % | Sobreproyecta en el agregado; medido y descontable |
 | Cobertura P10–P90 | — | 75,2 % | Objetivo nominal 80 % |
 
-> [!IMPORTANT]
-> **Ninguna cifra de error aparece sin su vara al lado.** Un WAPE de 0,356 no
-> significa nada hasta saber que el criterio que reemplaza —repetir el año
-> anterior— tiene 0,398. Todo el proyecto está construido sobre esa disciplina:
-> el baseline es un ciudadano de primera clase, no una nota al pie.
+<div align="center">
+
+### 🔗 &nbsp; [**Explorar el panel en vivo**](https://huggingface.co/spaces/diegoevans2-arch/proyeccion-demanda-asignaturas) &nbsp; 🔗
+
+Nueve módulos · bilingüe ES/EN · las 22.142 combinaciones filtrables y descargables
+
+</div>
 
 ---
 
@@ -243,10 +245,16 @@ abstracto.
 
 ## El panel
 
+<div align="center">
+
+## [▶ &nbsp; Abrir Euribia en vivo](https://huggingface.co/spaces/diegoevans2-arch/proyeccion-demanda-asignaturas)
+
+[![Hugging Face Space](https://img.shields.io/badge/Hugging%20Face-Space%20p%C3%BAblico-FFD21E?logo=huggingface&logoColor=black&style=for-the-badge)](https://huggingface.co/spaces/diegoevans2-arch/proyeccion-demanda-asignaturas)
+
+</div>
+
 Dashboard estático **bilingüe (ES/EN)**, sin dependencias externas: HTML, CSS y
 JavaScript plano. Sin CDN, sin build step, sin servidor.
-
-🔗 **[Ver el panel en vivo](https://huggingface.co/spaces/diegoevans2-arch/proyeccion-demanda-asignaturas)**
 
 | Módulo | Contenido |
 |---|---|

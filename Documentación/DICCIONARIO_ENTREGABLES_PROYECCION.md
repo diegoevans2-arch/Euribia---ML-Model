@@ -656,12 +656,11 @@ Audiencia: 🔧
 | **Insumo** | `DEMANDA_PROCESADA.parquet` (163.954 × 57), producido por `PIPELINE_PROYECCION_ASIGNATURAS.ipynb` |
 | **Dataset de entrenamiento** | 144.662 filas · 21.456 series · 55 períodos |
 | **Algoritmo** | CatBoost sobre la corrección logarítmica, puntual y cuantiles |
-| **Validación** | Walk-forward, 7 orígenes. **Nunca K-Fold** — ver Tomo 17 §10 |
-| **Métricas vigentes** | WAPE 0,344 vs baseline 0,379 (**+9,1%**) · MASE 1,489 · sesgo +0,004 |
+| **Validación** | Walk-forward, 7 orígenes. **Nunca K-Fold** — en series, el corte cronológico es lo único que evita leakage |
+| **Métricas vigentes** | WAPE 0,356 vs baseline 0,398 (**+10,6 % de skill**) · MASE 0,894 · sesgo +4,2 % — auditoría de despliegue sobre 55.983 celdas |
 | **Generado** | 2026-08-27 · `FASE 7d` añadida el 2026-08-28 |
 
 ---
 
 > **Diego Evans Pérez** · Ingeniería de Datos y Machine Learning
 > Diccionario de entregables · `v1.4` · 2026-08-28
-> Formato según [`Guía Maestra de Data Science`](../../../Data%20Science%20-%20Master%20Data/Guia-Maestra-DS/00-MOC-Guia-Maestra.md) — sistema de audiencias 🔧 🧭 👔
