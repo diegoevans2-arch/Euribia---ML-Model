@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Euribia · Predicción de la demanda de asignaturas</title>
+<meta name="description" content="Proyección de inscritos por asignatura, componente y sede para 2026-2027, con banda de incertidumbre y conversión a número de secciones.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="styles.css">
+<script>
+/* Antes de que el navegador pinte nada: la elección guardada manda sobre la del sistema. Va aquí
+   y no en app.js —que carga al final del body— porque si no se vería un destello claro al entrar
+   con el sistema en oscuro. El atributo queda siempre puesto, así que el CSS no necesita la
+   media query y la paleta oscura se declara una sola vez. */
+(function(){
+  var g = null;
+  try { g = localStorage.getItem('tema'); } catch (e) {}
+  document.documentElement.dataset.tema =
+    g || (matchMedia('(prefers-color-scheme:dark)').matches ? 'oscuro' : 'claro');
+})();
+</script>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="htop">
+    <div>
+      <h1 id="h1"><span class="nom">Euribia</span><span class="lema">Predicción de la demanda de asignaturas</span></h1>
+      <p class="sub" id="intro"></p>
+    </div>
+    <div class="hctl">
+      <div class="tema" id="tema">
+        <button data-tm="claro" aria-pressed="false" title="Tema claro">☀</button>
+        <button data-tm="oscuro" aria-pressed="false" title="Tema oscuro">☾</button>
+      </div>
+      <div class="lang">
+        <button data-l="es" aria-pressed="true">ES</button>
+        <button data-l="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </div>
+  <div class="meta" id="meta"></div>
+</header>
+
+<nav id="tabs"></nav>
+<div id="app"><div class="loading">Cargando datos…</div></div>
+
+<footer>
+  <p id="foot1"></p>
+  <p id="foot2"></p>
+</footer>
+</div>
+
+<script src="i18n.js"></script>
+<script src="charts.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+:root, [data-tema="claro"]{
+  --bg:#fbfbfa; --panel:#fff; --ink:#1a1a18; --muted:#6b6b66; --line:#e5e4e0;
+  --real:#1b3a5c; --pred:#e07b39; --naive:#9a9a95; --good:#2e7d5b; --bad:#b6432f;
+  --accent:#1b3a5c; --chip:#f2f1ed; --dot:rgba(224,123,57,.42);
+  /* Rampa secuencial N1→N8: los niveles están ordenados, el color también.
+     Barrido frío→cálido a luminosidad baja constante, para que los ocho pasos
+     mantengan ≥4,3:1 contra el fondo claro y no sólo los extremos se vean. */
+  --l1:#0d3b5c; --l2:#0f6072; --l3:#137a6a; --l4:#3c8340;
+  --l5:#6f7d24; --l6:#9a6a14; --l7:#b1521c; --l8:#bf3d22;
+  /* Paleta CATEGÓRICA para instituciones: los niveles están ordenados y llevan rampa,
+     las instituciones no — aquí hace falta separación por tono, no por luminosidad. */
+  --k1:#1b6ca8; --k2:#c1440e; --k3:#2d7d46; --k4:#8b3a8f;
+  --k5:#8a6410; --k6:#0f7d80; --k7:#b02f52; --k8:#4f5570;
+}
+/* La paleta oscura cuelga del atributo, no de la media query: el script del <head>
+   resuelve la preferencia del sistema y la deja escrita ahí, así que esto vale para
+   los dos casos y el toggle puede sobreescribirla. */
+:root[data-tema="oscuro"]{ --bg:#14140f; --panel:#1c1c17; --ink:#f0efe9; --muted:#a3a29a; --line:#2e2e27;
+         --real:#7fb0dd; --pred:#f0a05a; --naive:#7a7a74; --good:#5cb98d; --bad:#e0745c;
+         --accent:#7fb0dd; --chip:#25251e; --dot:rgba(240,160,90,.42);
+         --l1:#5b9ed6; --l2:#4fb0c9; --l3:#4dc2bd; --l4:#5fd0a4;
+         --l5:#8bdc8c; --l6:#b8e37c; --l7:#e2dd79; --l8:#f0a05a;
+         --k1:#6fb3e8; --k2:#f0955e; --k3:#6cc98a; --k4:#c88fd0;
+         --k5:#dcc264; --k6:#5cc9c9; --k7:#ef8fa8; --k8:#a8adc9; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 72px}
+header{border-bottom:1px solid var(--line);margin-bottom:26px;padding:34px 0 22px}
+.htop{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+h1{font-size:1.62rem;margin:0 0 6px;letter-spacing:-.02em;font-weight:650}
+.sub{color:var(--muted);font-size:.93rem;max-width:70ch}
+.meta{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:99px;
+  padding:3px 11px;font-size:.76rem;color:var(--muted);white-space:nowrap}
+.lang{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:0 0 auto}
+.lang button{background:var(--panel);border:0;color:var(--muted);padding:6px 12px;
+  font:inherit;font-size:.8rem;cursor:pointer}
+.lang button[aria-pressed=true]{background:var(--accent);color:var(--bg);font-weight:600}
+nav{display:flex;gap:2px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:26px}
+nav button{background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);
+  padding:10px 14px;font:inherit;font-size:.9rem;cursor:pointer;margin-bottom:-1px}
+nav button:hover{color:var(--ink)}
+nav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+section[hidden]{display:none}
+h2{font-size:1.12rem;margin:34px 0 4px;font-weight:640;letter-spacing:-.01em}
+h2:first-child{margin-top:0}
+h3{font-size:.95rem;margin:22px 0 8px;font-weight:620}
+p.note{color:var(--muted);font-size:.87rem;margin:4px 0 16px;max-width:78ch}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(178px,1fr))}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+.kpi .lbl{font-size:.73rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;
+  margin-bottom:5px;line-height:1.3}
+.kpi .val{font-size:1.5rem;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .sub2{font-size:.79rem;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+.pos{color:var(--good)} .neg{color:var(--bad)}
+/* la banda se resalta cuando el real cayó dentro: es la lectura de un vistazo */
+td.banda{color:var(--muted);font-size:.82rem;white-space:nowrap}
+td.banda.dentro{color:var(--ink)}
+td.banda.dentro::after{content:" ✓";color:var(--good);font-weight:700}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:18px;margin:16px 0}
+.two{display:grid;gap:16px;grid-template-columns:1fr 1fr}
+@media(max-width:860px){.two{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+th,td{padding:7px 9px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+th{font-weight:620;color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.04em;
+  position:sticky;top:0;background:var(--panel);z-index:1}
+tbody tr:hover{background:var(--chip)}
+tbody tr.hl{background:color-mix(in srgb,var(--pred) 14%,transparent)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tall{max-height:480px;overflow-y:auto}
+svg{display:block;max-width:100%;height:auto}
+canvas{display:block;width:100%;height:auto;border-radius:6px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin:8px 0 2px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.legend:empty{display:none}
+.ldot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+th.lcol,td.lcol{text-align:left}
+.verdict{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+@media(max-width:860px){.verdict{grid-template-columns:1fr}}
+.vbox{border:1px solid var(--line);border-radius:11px;padding:16px;background:var(--panel)}
+.vbox h4{margin:0 0 10px;font-size:.95rem}
+.vbox ul{margin:0;padding-left:18px}
+.vbox li{margin-bottom:8px;font-size:.87rem}
+.vbox.ok{border-left:3px solid var(--good)} .vbox.no{border-left:3px solid var(--bad)}
+.callout{border-left:3px solid var(--pred);background:var(--panel);border-radius:0 9px 9px 0;
+  padding:13px 16px;margin:16px 0;font-size:.89rem}
+input[type=search],select{background:var(--panel);border:1px solid var(--line);color:var(--ink);
+  border-radius:8px;padding:7px 11px;font:inherit;font-size:.86rem}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--panel);border:0;border-right:1px solid var(--line);color:var(--muted);
+  padding:6px 12px;font:inherit;font-size:.82rem;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--bg);font-weight:600}
+/* --- filtros por descriptor, en cascada --- */
+.facets{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.fac{position:relative}
+.facbtn{display:inline-flex;align-items:center;gap:7px;background:var(--panel);
+  border:1px solid var(--line);border-radius:8px;padding:7px 11px;color:var(--ink);
+  font:inherit;font-size:.84rem;cursor:pointer;white-space:nowrap}
+.facbtn:hover{border-color:var(--accent)}
+.facbtn[aria-expanded=true]{border-color:var(--accent)}
+.facbtn.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--panel))}
+.facbtn .cnt{background:var(--accent);color:var(--bg);border-radius:99px;
+  padding:0 6px;font-size:.72rem;font-weight:650;line-height:1.5}
+.facbtn .car{color:var(--muted);font-size:.7rem}
+.facpan{position:absolute;z-index:40;top:calc(100% + 5px);left:0;width:308px;
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  box-shadow:0 8px 26px rgba(0,0,0,.16);padding:9px}
+.facpan[hidden]{display:none}
+.facpan input[type=search]{width:100%;margin-bottom:7px}
+.facacts{display:flex;gap:6px;margin-bottom:7px}
+.facacts button{flex:1;background:var(--chip);border:1px solid var(--line);border-radius:6px;
+  color:var(--muted);padding:4px 8px;font:inherit;font-size:.76rem;cursor:pointer}
+.facacts button:hover{color:var(--ink);border-color:var(--accent)}
+.faclist{max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:1px}
+.faclist label{display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:5px;
+  font-size:.82rem;cursor:pointer;line-height:1.3}
+.faclist label:hover{background:var(--chip)}
+.faclist input{flex:0 0 auto;margin:0;accent-color:var(--accent)}
+.faclist .fv{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.faclist .fn{color:var(--muted);font-size:.74rem;font-variant-numeric:tabular-nums}
+.facempty{color:var(--muted);font-size:.8rem;padding:10px 6px}
+.selchips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.selchips button{display:inline-flex;align-items:center;gap:6px;background:var(--chip);
+  border:1px solid var(--line);border-radius:99px;padding:3px 9px;color:var(--ink);
+  font:inherit;font-size:.76rem;cursor:pointer;max-width:340px}
+.selchips button:hover{border-color:var(--bad);color:var(--bad)}
+.selchips button .x{color:var(--muted);font-weight:700}
+.selchips .lbl{color:var(--muted)}
+.selchips .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.selchips:empty{display:none}
+@media(max-width:520px){.facpan{width:min(308px,calc(100vw - 48px))}}
+.dl{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.dl a,.dl button{display:inline-flex;align-items:center;gap:8px;background:var(--panel);
+  border:1px solid var(--line);border-radius:9px;padding:11px 15px;color:var(--ink);
+  text-decoration:none;font:inherit;font-size:.87rem;cursor:pointer}
+.dl a:hover,.dl button:hover{border-color:var(--accent)}
+.dl .sz{color:var(--muted);font-size:.78rem}
+footer{margin-top:52px;padding-top:20px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:.82rem}
+a{color:var(--accent)}
+.loading{padding:60px 0;text-align:center;color:var(--muted)}
+code{background:var(--chip);padding:1px 5px;border-radius:4px;font-size:.85em}
+.tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:7px;padding:7px 10px;font-size:.78rem;box-shadow:0 4px 16px rgba(0,0,0,.14);
+  z-index:50;max-width:280px;opacity:0;transition:opacity .1s}
+.tip.on{opacity:1}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Añadidos del Space de proyección de asignaturas.
+   Reutilizan los tokens de arriba: no se introduce ningún color nuevo.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Las tablas anchas scrollean DENTRO de su caja, nunca la página.
+   Sin esto, en móvil la tabla de la matriz criterio×nivel empuja el body. */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0 4px}
+.tw table{min-width:max-content}
+
+/* Primera columna ancha: para tablas cuyo encabezado de fila es texto largo */
+table.lft th:first-child,table.lft td:first-child{min-width:190px}
+
+/* Fila de período proyectado: marca tenue, legible en claro y oscuro */
+tr.fut{background:color-mix(in srgb,var(--pred) 9%,transparent)}
+
+.mut{color:var(--muted);font-size:.88em}
+
+/* Callouts. `exec` es la lectura de negocio y va con el acento, no en gris:
+   es la frase que alguien va a copiar a un correo. */
+.cal{border-left:3px solid var(--line);background:var(--panel);
+  border-radius:0 9px 9px 0;padding:12px 15px;margin:12px 0;font-size:.9rem}
+/* Sólo el TÍTULO del callout va en su propia línea. Un `.cal b` a secas rompía
+   en bloque cualquier negrita del cuerpo — la cadena «inscritos → modelo → P50»
+   se partía en cinco renglones. */
+.cal > b:first-child{display:block;margin-bottom:4px}
+.cal.info{border-left-color:var(--accent)}
+.cal.warn{border-left-color:var(--pred)}
+.cal.danger{border-left-color:var(--bad)}
+.cal.exec{border-left-color:var(--good);background:color-mix(in srgb,var(--good) 6%,var(--panel))}
+.cal code{background:var(--chip);border-radius:4px;padding:1px 5px;font-size:.92em}
+
+/* Filtros del explorador */
+.filtros{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin:14px 0 6px}
+.fl{display:flex;flex-direction:column;gap:4px;font-size:.76rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.04em}
+.fl input,.fl select{font:inherit;font-size:.88rem;text-transform:none;letter-spacing:0;
+  color:var(--ink);background:var(--panel);border:1px solid var(--line);
+  border-radius:8px;padding:7px 10px;min-width:150px}
+.fl input:focus,.fl select:focus{outline:2px solid var(--accent);outline-offset:-1px}
+
+.pag{display:flex;gap:10px;align-items:center;justify-content:center;margin:18px 0 4px;
+  font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.pag button{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+  color:var(--ink);padding:6px 14px;font:inherit;cursor:pointer}
+.pag button:disabled{opacity:.4;cursor:default}
+.pag button:not(:disabled):hover{border-color:var(--accent)}
+
+ul{padding-left:20px;margin:8px 0} li{margin:6px 0;font-size:.9rem}
+
+/* Chips de filtro del módulo de escenarios. Un chip apagado sigue siendo legible:
+   el estado se marca con fondo y peso, no bajando el contraste del texto. */
+.fgrp{display:flex;flex-direction:column;gap:5px}
+.flbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+button.chip{cursor:pointer;font:inherit;font-size:.76rem;background:var(--chip);
+  border:1px solid var(--line);border-radius:99px;padding:4px 11px;color:var(--muted)}
+button.chip:hover{border-color:var(--accent);color:var(--ink)}
+button.chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);
+  color:var(--bg);font-weight:600}
+.vs{font-size:.72rem;margin-top:1px;font-variant-numeric:tabular-nums}
+.vs.pos{color:var(--good)} .vs.amb{color:var(--pred)} .vs.neg{color:var(--bad)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 2px;font-size:.78rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend i{width:11px;height:3px;border-radius:2px;display:inline-block}
+button.chip.reg[aria-pressed=true]{background:var(--real);border-color:var(--real)}
+
+/* Controles de cabecera: tema y idioma, agrupados */
+.hctl{display:flex;gap:8px;align-items:center;flex:0 0 auto}
+.tema{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:0 0 auto}
+.tema button{background:var(--panel);border:0;color:var(--muted);padding:6px 11px;
+  font:inherit;font-size:.82rem;cursor:pointer;line-height:1.4}
+.tema button:hover{color:var(--ink)}
+.tema button[aria-pressed=true]{background:var(--accent);color:var(--bg)}
+
+/* Tooltip unificado del gráfico de escenarios. `.tip` ya existe en charts.js;
+   esto le da la estructura interna de varias series. */
+.tip .tt{min-width:172px}
+.tip .th{font-weight:650;margin-bottom:5px;padding-bottom:4px;
+  border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.tip .tr{display:flex;align-items:center;gap:7px;font-size:.82rem;margin:3px 0;
+  font-variant-numeric:tabular-nums}
+.tip .tr b{margin-left:auto;font-weight:640}
+.tip .tr i{width:9px;height:3px;border-radius:2px;flex:0 0 auto}
+
+/* Botón de descarga dentro de una tarjeta KPI */
+.dlb{margin-top:11px;width:100%;background:var(--accent);color:var(--bg);border:0;
+  border-radius:8px;padding:8px 12px;font:inherit;font-size:.84rem;font-weight:600;cursor:pointer}
+.dlb:hover{filter:brightness(1.12)}
+.dlb:disabled{background:var(--chip);color:var(--muted);cursor:default;filter:none}
+/* Las cinco capas del modelo */
+.capas{display:flex;flex-direction:column;gap:8px;margin:12px 0 4px}
+.capa{display:flex;gap:12px;align-items:flex-start;background:var(--panel);
+  border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:0 9px 9px 0;padding:11px 14px}
+.capa .cn{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--accent);
+  color:var(--bg);font-size:.76rem;font-weight:700;display:grid;place-items:center}
+.capa b{display:block;font-size:.89rem;margin-bottom:2px}
+.capa .mut{font-size:.85rem;line-height:1.45}
+
+/* ── Tablas de PROSA, no de números ─────────────────────────────────────────
+   El estilo base alinea a la derecha y aplica nowrap, que es lo correcto para
+   cifras: mantiene los dígitos comparables columna a columna. Pero en una tabla
+   cuyo contenido son frases —«cómo leer las cifras»— eso estira la tabla al doble
+   del ancho disponible y obliga a scrollear para llegar a la última columna.
+   Aquí se invierte: todo a la izquierda, el texto envuelve, y los anchos se
+   reparten en porcentaje para que las cuatro columnas quepan de una vez. */
+/* ⚠️ `.tw table{min-width:max-content}` —correcto para tablas de cifras, que no
+   deben partirse— aquí hay que ANULARLO: con texto que envuelve, `max-content` es
+   el ancho de la frase entera sin cortar, y la tabla se iba a 3.241 px dentro de un
+   contenedor de 1.140. `table-layout:fixed` hace que mande el <colgroup>. */
+.tw table.txt{min-width:0;width:100%;table-layout:fixed}
+table.txt th, table.txt td{text-align:left;white-space:normal;vertical-align:top;
+  line-height:1.45;padding:10px 12px;overflow-wrap:anywhere}
+table.txt td:first-child{font-weight:650;white-space:nowrap}
+table.txt col.c1{width:8rem} table.txt col.c2{width:24%}
+table.txt col.c3{width:40%}  table.txt col.c4{width:24%}
+/* la última columna es el valor: se lee mejor con cifras tabulares */
+table.txt td:last-child{font-variant-numeric:tabular-nums}
+@media(max-width:760px){
+  table.txt col.c1,table.txt col.c2,table.txt col.c3,table.txt col.c4{width:auto}
+}
+
+/* Diagramas de arquitectura en ASCII. Monoespaciado y sin envolver: el dibujo se
+   sostiene en la posición exacta de cada carácter, así que se prefiere scroll
+   horizontal antes que romper las líneas. El tamaño baja en pantallas chicas para
+   que los 66 caracteres de ancho quepan sin scroll siempre que se pueda. */
+pre.ascii{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+  padding:14px 16px;margin:12px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  font:12.5px/1.42 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--ink);white-space:pre;tab-size:2}
+@media(max-width:900px){ pre.ascii{font-size:10.5px;line-height:1.38} }
+@media(max-width:560px){ pre.ascii{font-size:9px} }
+
+/* La procedencia del nombre, en el pie: es contexto, no un dato del modelo */
+footer .orig{font-size:.8rem;color:var(--muted);font-style:italic;margin-bottom:6px}
+
+/* Encabezado en dos líneas: el nombre manda, el lema explica.
+   El <h1> pasa a `display:block` con dos spans para que el salto sea estructural
+   y no un <br>, que se comporta mal al reflujo en pantallas angostas. */
+h1 .nom{display:block;font-size:1.72rem;font-weight:680;letter-spacing:-.025em;
+  line-height:1.15}
+h1 .lema{display:block;font-size:1.02rem;font-weight:500;color:var(--muted);
+  letter-spacing:-.005em;margin-top:3px}
+@media(max-width:560px){
+  h1 .nom{font-size:1.42rem} h1 .lema{font-size:.94rem}
+}
+
+/* ── Cabecera centrada ──────────────────────────────────────────────────────
+   El bloque de texto —nombre, lema, bajada y chips— se centra en todo el ancho.
+   Los controles de tema e idioma salen del flujo y se anclan a la derecha: si
+   siguieran dentro del flex, el título se centraría respecto al espacio que
+   ellos dejan libre, no respecto a la página, y quedaría corrido a la izquierda.
+   Se reserva altura arriba para que el título no se meta debajo de los botones. */
+.htop{position:relative;justify-content:center;padding-top:38px}
+.htop > div:first-child{text-align:center;max-width:100%}
+.hctl{position:absolute;top:0;right:0}
+h1{text-align:center}
+.sub{margin-left:auto;margin-right:auto}
+.meta{justify-content:center}
+
+/* En pantallas angostas vuelve a apilarse: centrar con los controles encima deja
+   demasiado aire muerto y el título se parte en tres líneas. */
+@media(max-width:620px){
+  .htop{padding-top:0;flex-direction:column;align-items:center;gap:14px}
+  .hctl{position:static}
+}
