@@ -14,7 +14,7 @@ author: Diego Evans Pérez Paz
 
 # 📊 Diccionario de Entregables — Proyección de Demanda de Asignaturas
 
-**Navegación:** [`HANDOFF_MODELO_PROYECCION.md`](HANDOFF_MODELO_PROYECCION.md) · [`CONTEXTO_REGLAS_DURAS.md`](CONTEXTO_REGLAS_DURAS.md) · [`PLAN_PROYECCION_DEMANDA_ASIGNATURAS.md`](PLAN_PROYECCION_DEMANDA_ASIGNATURAS.md) · [`BITACORA_EXPERIMENTOS.md`](BITACORA_EXPERIMENTOS.md)
+**Navegación:** [`RESUMEN_EJECUTIVO.md`](RESUMEN_EJECUTIVO.md) · [`DOCUMENTO_TECNICO_FUNCIONAL_PIPELINE.md`](DOCUMENTO_TECNICO_FUNCIONAL_PIPELINE.md) · [`DOCUMENTO_TECNICO_FUNCIONAL_MODELO_ML.md`](DOCUMENTO_TECNICO_FUNCIONAL_MODELO_ML.md)
 
 Audiencia: 🔧 🧭 👔
 
@@ -104,8 +104,8 @@ Audiencia: 🔧 🧭 👔
 
 > [!important] 🎯 La regla en una línea
 > **`P50_ESPERADO` para SUMAR. `P50` para DIMENSIONAR.** Todo lo demás se deduce de
-> ahí. La versión completa, con la tabla de decisión y los dos errores simétricos,
-> está en [`CONTEXTO_REGLAS_DURAS.md`](CONTEXTO_REGLAS_DURAS.md) §8.3.
+> ahí. La tabla de decisión completa, con los dos errores simétricos, está en §2 de
+> este mismo documento.
 
 > [!warning] ⚠️ El valor esperado no es un pronóstico de cupos
 > `P50_ESPERADO` es una cifra **agregable**, no una cifra **operativa**. Nunca dimensiones una sala con ella.

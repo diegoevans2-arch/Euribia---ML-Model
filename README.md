@@ -27,7 +27,7 @@ que representan **2.612.770 inscritos**.
 
 | Métrica | Seasonal naive | **Euribia** | Lectura |
 |---|---:|---:|---|
-| **WAPE** | 0,398 | **0,356** | De cada 100 inscritos, cuántos quedan mal asignados |
+| **WAPE** | 0,398 | **0,356** | Desvío total sobre el volumen real, ponderado por tamaño |
 | **MAE** | 18,6 | **16,6** | Inscritos de error por celda |
 | **MASE** | 1,000 | **0,894** | Bajo 1 le gana al baseline |
 | **Skill score** | — | **+10,6 %** | `1 − WAPE_modelo / WAPE_vara` |

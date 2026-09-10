@@ -103,7 +103,7 @@ function vModelo() {
   const met = [
     ['MAE', F.n(m.mae, 2), LANG === 'en' ? 'enrolments of error per combination' : 'inscritos de error por combinación'],
     ['RMSE', F.n(m.rmse, 2), LANG === 'en' ? 'penalises large errors' : 'penaliza los errores grandes'],
-    ['WAPE', F.d(m.wape), LANG === 'en' ? 'Σ|error| / Σ actual — robust with zeros' : 'Σ|error| / Σ real — robusto con ceros'],
+    ['WAPE', F.d(m.wape), LANG === 'en' ? 'Σ|error| / Σ actual — weighted by size, robust with zeros' : 'Σ|error| / Σ real — ponderado por tamaño, robusto con ceros'],
     ['sMAPE', F.d(m.smape), LANG === 'en' ? 'symmetric; unstable near zero' : 'simétrico; inestable cerca de cero'],
     ['MASE', F.d(m.mase), (m.mase < 1 ? '✅ ' : '⚠️ ') + (LANG === 'en'
         ? (m.mase < 1 ? '< 1: beats the naive' : '> 1: does NOT beat the naive')

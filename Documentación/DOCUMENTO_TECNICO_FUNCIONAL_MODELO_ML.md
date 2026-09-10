@@ -266,7 +266,7 @@ Sobre 55.983 celdas y 2.612.770 inscritos. Cada cifra con su vara al lado:
 
 | Métrica | Uso |
 |---|---|
-| **WAPE** | `Σ|y−ŷ| / Σy` — robusto, agrega bien |
+| **WAPE** | `Σ|y−ŷ| / Σy` — **ponderado por tamaño**: cada celda pesa por sus alumnos. Robusto con ceros y agrega bien |
 | **MASE** | Referencia comparable entre series; escala = MAE in-sample del naive, **solo con train** |
 | **Sesgo** | `Σ(ŷ−y)/Σy` — ¿sobre o sub-proyecta? |
 | MAE / RMSE | Interpretable en inscritos; RMSE expone la cola |
@@ -582,16 +582,10 @@ El `× 1,10` es un colchón explícito — regla dura del negocio.
 
 | Documento | Qué aporta |
 |---|---|
-| [`HANDOFF_MODELO_PROYECCION.md`](HANDOFF_MODELO_PROYECCION.md) | Crónica: qué se hizo, qué falló, errores y pendientes |
-| [`BITACORA_EXPERIMENTOS.md`](BITACORA_EXPERIMENTOS.md) | 15 experimentos con cifra medida y conclusión |
-| [`CONTEXTO_REGLAS_DURAS.md`](CONTEXTO_REGLAS_DURAS.md) | Reglas de negocio numeradas (R-xx) |
-| [`DICCIONARIO_ENTREGABLES_PROYECCION.md`](DICCIONARIO_ENTREGABLES_PROYECCION.md) | Los dos CSV campo por campo, con recetas SQL |
+| [`RESUMEN_EJECUTIVO.md`](RESUMEN_EJECUTIVO.md) | El proyecto completo en diez minutos |
 | [`DOCUMENTO_TECNICO_FUNCIONAL_PIPELINE.md`](DOCUMENTO_TECNICO_FUNCIONAL_PIPELINE.md) | La sábana de datos que alimenta este modelo |
-| [`PLAN_PROYECCION_DEMANDA_ASIGNATURAS.md`](PLAN_PROYECCION_DEMANDA_ASIGNATURAS.md) | Decisiones de diseño (D-xx) con justificación |
-| [`CASO_USO_HOMOLOGACION_REGLAS_RANKING.md`](CASO_USO_HOMOLOGACION_REGLAS_RANKING.md) | Las 4 variantes de homologación evaluadas |
-| [`FEEDBACK_RECONCILIACION_PROYECTO.md`](FEEDBACK_RECONCILIACION_PROYECTO.md) | Análisis técnico + mejoras propuestas |
-| `Análisis_despliegue_modelo.ipynb` | Auditoría post-producción (15 celdas) |
-| `nota-tecnica_2026-07-27_modelo-ml-*.md` | ⚠️ Versión anterior (histórica, pre-CatBoost) |
+| [`DICCIONARIO_ENTREGABLES_PROYECCION.md`](DICCIONARIO_ENTREGABLES_PROYECCION.md) | Los dos CSV campo por campo, con recetas SQL |
+| [`Análisis_deploy_modelo.ipynb`](../Notebooks/Análisis_deploy_modelo.ipynb) | Auditoría post-producción (17 celdas) |
 
 ---
 

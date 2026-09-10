@@ -683,13 +683,9 @@ Medido en `Análisis_despliegue_modelo.ipynb` sobre 23 períodos cerrados:
 
 | Documento | Qué aporta |
 |---|---|
-| `CONTEXTO_REGLAS_DURAS.md` | las reglas de negocio numeradas (R-xx) y el §10 anti-leakage |
-| `PLAN_PROYECCION_DEMANDA_ASIGNATURAS.md` | decisiones de diseño (D-xx) con su justificación |
-| `BITACORA_EXPERIMENTOS.md` | experimentos con resultado, incluidos los negativos |
-| `DICCIONARIO_ENTREGABLES_PROYECCION.md` | campo por campo de los dos CSV de salida del modelo |
-| `CASO_USO_HOMOLOGACION_REGLAS_RANKING.md` | las cuatro variantes de homologación evaluadas |
-| `HANDOFF_MODELO_PROYECCION.md` | traspaso operativo |
-| `nota-tecnica_2026-07-27_pipeline-*.md` | versión anterior de esta nota (histórica) |
+| [`RESUMEN_EJECUTIVO.md`](RESUMEN_EJECUTIVO.md) | El proyecto completo en diez minutos |
+| [`DOCUMENTO_TECNICO_FUNCIONAL_MODELO_ML.md`](DOCUMENTO_TECNICO_FUNCIONAL_MODELO_ML.md) | El modelo que consume esta sábana |
+| [`DICCIONARIO_ENTREGABLES_PROYECCION.md`](DICCIONARIO_ENTREGABLES_PROYECCION.md) | Campo por campo de los dos CSV de salida |
 
 ---
 
